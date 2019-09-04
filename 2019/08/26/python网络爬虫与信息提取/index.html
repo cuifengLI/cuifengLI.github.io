@@ -10,7 +10,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="google" content="notranslate">
     <meta name="keywords" content="cuifengLI,"> 
-    <meta name="description" content="python的安装​        python是一种面向对象、直译式计算机程序设计语言，也是一种功能强大而完善的通用型语言，这种语言具有非常简洁而清晰的语法特点，适合完成各种高层任务，几乎可以在所,"> 
+    <meta name="description" content="title: python网络爬虫与信息提取date: 2019-08-26 11:06:35tags: python,网络爬虫,信息提取categories: pythoncover: /img/,"> 
     <meta name="author" content="cuifeng Li"> 
     <link rel="alternative" href="atom.xml" title="莫春" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -62,7 +62,8 @@
 
         </div>
         <div class="content markdown">
-            <h3 id="python的安装"><a href="#python的安装" class="headerlink" title="python的安装"></a>python的安装</h3><p>​        python是一种面向对象、直译式计算机程序设计语言，也是一种功能强大而完善的通用型语言，这种语言具有非常简洁而清晰的语法特点，适合完成各种高层任务，几乎可以在所有的操作系统中运行。<a href="https://mp.weixin.qq.com/s/0RqtzljjjWjieDCmLdvLPg" target="_blank" rel="noopener">python3.6环境的安装</a>：</p>
+            <p>title: python网络爬虫与信息提取<br>date: 2019-08-26 11:06:35<br>tags: python,网络爬虫,信息提取<br>categories: python<br>cover: /img/welcome.jpg<br>typora-copy-images-to: ./</p>
+<h3 id="python的安装"><a href="#python的安装" class="headerlink" title="python的安装"></a>python的安装</h3><p>​        python是一种面向对象、直译式计算机程序设计语言，也是一种功能强大而完善的通用型语言，这种语言具有非常简洁而清晰的语法特点，适合完成各种高层任务，几乎可以在所有的操作系统中运行。<a href="https://mp.weixin.qq.com/s/0RqtzljjjWjieDCmLdvLPg" target="_blank" rel="noopener">python3.6环境的安装</a>：</p>
 <h3 id="Requests库安装方法："><a href="#Requests库安装方法：" class="headerlink" title="Requests库安装方法："></a>Requests库安装方法：</h3><p>​        Requests库：作为自动爬取HTML页面自动网络提交，是公认爬取网页最好的第三方库，具有简单简介的优质特点。<a href="http://cn.python-requests.org/zh_CN/latest/index.html" target="_blank" rel="noopener">Requests库官方文档中文版</a></p>
 <ul>
 <li>利用管理员权限启动cmd控制台</li>
@@ -77,11 +78,8 @@
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install requests</span><br></pre></td></tr></table></figure>
 
 <h3 id="Requests库的get-方法"><a href="#Requests库的get-方法" class="headerlink" title="Requests库的get()方法"></a>Requests库的get()方法</h3><p>​        Requests库中的get()方法，通过借助“r”和“url（获取页面的url链接）”，构造一个向服务器请求资源的Requests对象，返回一个包含服务器资源的Response对象，response对象包含爬虫返回的全部内容</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">r=requests.get(url,params=<span class="literal">None</span>,**kwargs)</span><br><span class="line">&lt;!--常用方法如下：--&gt;</span><br><span class="line">r=requests.get(url)</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">r=requests.get(url,params=<span class="literal">None</span>,**kwargs)</span><br><span class="line">&lt;!--常用方法如下：--&gt;</span><br><span class="line">r=requests.get(url)</span><br><span class="line">&lt;!--其中对上述参数解析：--&gt;</span><br><span class="line">&lt;!--url：获取页面的url链接--&gt;</span><br><span class="line">&lt;!--Response对象包含爬虫返回的全部信息内容--&gt;</span><br></pre></td></tr></table></figure>
 
-<p>​        <!--其中对上述参数解析：--></p>
-<p>​        <!--url：获取页面的url链接--></p>
-<p>​        <!--Response对象包含爬虫返回的全部信息内容--></p>
 <p>Response对象实例分析：</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">r=requests.get(<span class="string">"http://www.baidu.com"</span>)</span><br><span class="line">print(r.status_code)  &lt;!--检测这个请求的状态码，如果返回值为200，则证明请求成功--&gt;</span><br><span class="line">type(r)  &lt;!--检测r的类型--&gt;</span><br><span class="line">r.headers  &lt;!--返回get页面请求的头部信息--&gt;</span><br></pre></td></tr></table></figure>
 
@@ -170,7 +168,6 @@
 <li>port：端口号，默认缺省端口为80</li>
 <li>path：请求资源的内部路径</li>
 </ul>
-<p><img src="D:%5CTypora_image%5CS90825-19275866.jpg" alt></p>
 <table>
 <thead>
 <tr>
