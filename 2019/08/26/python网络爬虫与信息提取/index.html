@@ -125,38 +125,31 @@
 <tr>
 <th align="center">Requests库异常</th>
 <th align="center">属性</th>
-<th align="center">备注</th>
 </tr>
 </thead>
 <tbody><tr>
 <td align="center">requests.ConnectionError</td>
-<td align="center">网络连接错误异常</td>
-<td align="center">如DNS查询失败、拒绝连接</td>
+<td align="center">网络连接错误异常，如DNS查询失败，拒绝连接等</td>
 </tr>
 <tr>
 <td align="center">requests.HTTPError</td>
 <td align="center">HTTP协议方面错误异常</td>
-<td align="center"></td>
 </tr>
 <tr>
 <td align="center">requests.URLRequired</td>
 <td align="center">URL缺失异常</td>
-<td align="center"></td>
 </tr>
 <tr>
 <td align="center">requests.TooManyRedirects</td>
 <td align="center">超过大量定向次数，产生重定向异常</td>
-<td align="center"></td>
 </tr>
 <tr>
 <td align="center">requests.ConnectTimeout</td>
 <td align="center">连接远程服务器超时异常</td>
-<td align="center"></td>
 </tr>
 <tr>
 <td align="center">requests.Timeout</td>
 <td align="center">请求URL超时，产生超时异常</td>
-<td align="center"></td>
 </tr>
 </tbody></table>
 <p>常用爬取网页的通用代码框架：</p>
@@ -227,6 +220,7 @@
 <li>采用PATCH：仅需要向URL提交用户名的局部更新请求，更好的节省网络带宽</li>
 <li>采用PUT：必须将所有字段一并提交到URL，未提交字段被删除</li>
 </ol>
+<p><img src="E:%5CGit%5Cboke%5Csource_posts%5CS90825-19275866.jpg" alt="HTTP协议对资源的操作"></p>
 <h3 id="Requests库主要方法及其解析"><a href="#Requests库主要方法及其解析" class="headerlink" title="Requests库主要方法及其解析"></a>Requests库主要方法及其解析</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">requests.request(method,url,**kwargs)</span><br><span class="line"><span class="comment">#其中**kwargs为控制访问的参数，均为可选项</span></span><br><span class="line"><span class="comment">#其中method对应七种不同的请求方法，示例如下，其他方法类似</span></span><br><span class="line">r=requests.request(<span class="string">'GET'</span>,url,**kwargs)</span><br><span class="line">r=requests.request(<span class="string">'HEAD'</span>,url,**kwargs)</span><br></pre></td></tr></table></figure>
 
 
@@ -249,16 +243,6 @@
             
         </div>
         
-    <div id='gitalk-container' class="comment link"
-        data-ae='false'
-        data-ci='f178c254e9aba3c644ea'
-        data-cs='bc6b63e12e13aebc62a709a44c94bd10c2735e59'
-        data-r='gitalk'
-        data-o='cuifengLI'
-        data-a='cuifengLI'
-        data-d='true'
-    >查看评论</div>
-
 
     </div>
     
@@ -269,6 +253,9 @@
             <!-- 来必力City版安装代码 -->
 <div id="lv-container" data-id="city" data-uid="MTAyMC80NjMyMi8yMjgzMw==">
     <script type="text/javascript">
+    window.livereOptions={
+        refer:'http://cuifengLI.github.io'
+    }
        (function(d, s) {
            var j, e = d.getElementsByTagName(s)[0];
     
