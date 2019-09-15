@@ -223,6 +223,34 @@
 <p><img src="E:%5CGit%5Cboke%5Csource_posts%5CS90825-19275866.jpg" alt="HTTP协议对资源的操作"></p>
 <h3 id="Requests库主要方法及其解析"><a href="#Requests库主要方法及其解析" class="headerlink" title="Requests库主要方法及其解析"></a>Requests库主要方法及其解析</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">requests.request(method,url,**kwargs)</span><br><span class="line"><span class="comment">#其中**kwargs为控制访问的参数，均为可选项</span></span><br><span class="line"><span class="comment">#其中method对应七种不同的请求方法，示例如下，其他方法类似</span></span><br><span class="line">r=requests.request(<span class="string">'GET'</span>,url,**kwargs)</span><br><span class="line">r=requests.request(<span class="string">'HEAD'</span>,url,**kwargs)</span><br></pre></td></tr></table></figure>
 
+<p>举例说明requests库的部分request方法：</p>
+<ul>
+<li><strong><u>控制参数为params：</u></strong>字典或字节序列，作为参数增加到uml中，对url起到修改的效果</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">kv=&#123;<span class="string">'key1'</span>: <span class="string">'value1'</span>,<span class="string">'key2'</span>: <span class="string">'value2'</span>&#125;</span><br><span class="line">r=requests.request(<span class="string">'GET'</span>,<span class="string">'http://python123.io/ws'</span>,params=kv)</span><br><span class="line">print(r.url)</span><br><span class="line"></span><br><span class="line">//运行结果为：</span><br><span class="line">https://python123.io/ws?key1=value1&amp;key2=value2</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong><u>控制参数为data</u></strong>：重点作为向服务器提供或者提交资源时的文件</li>
+<li><strong><u>控制参数为json：</u></strong>JSON格式的数据，作为Request的内容，将字典内容直接上传至服务器的json语上</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kv=&#123;<span class="string">'key1'</span>: <span class="string">'value1'</span>,<span class="string">'key2'</span>: <span class="string">'value2'</span>&#125;</span><br><span class="line">r=requests.request(<span class="string">'POST'</span>,<span class="string">'http://python123.io/ws'</span>,json=kv)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong><u>控制参数为headers：</u></strong>可以通过这个字段定制访问url的http协议头</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hd=&#123;<span class="string">'user-agent'</span>:<span class="string">'Chrome/10'</span>&#125;</span><br><span class="line">r=requests.request(<span class="string">'POST'</span>,<span class="string">'http://python123.io/ws'</span>,headers=hd)</span><br></pre></td></tr></table></figure>
+
+<p>‘headers’再向服务器访问链接时，服务器看到的’user-agent’字段将会是Chrome/10,指Chrome的第十版浏览器版本，所以我们可以通过这个字段模仿不同浏览器的不同版本</p>
+<ul>
+<li>控制参数为timeout：设定超时时间，以秒为单位,在设定的时间内没有产生我们访问的内容，将会产生一个timeout的异常</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">r=requests.request(<span class="string">'GET'</span>,<span class="string">'http://www.baidu.com'</span>,timeout=<span class="number">10</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>控制参数为proxies:设定访问代理服务器，可以增加登录认证,防止爬虫逆追踪的情况发生</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pxs=&#123;<span class="string">'http://user:pass@10.10.10.1:1234'</span> <span class="string">'https'</span>:<span class="string">'https://10.10.10.1:4321'</span>&#125;</span><br><span class="line">r=requests.request(<span class="string">'GET'</span>,<span class="string">'http://www.baidu.com'</span>,proxies=pxs)</span><br></pre></td></tr></table></figure>
+
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="true">
