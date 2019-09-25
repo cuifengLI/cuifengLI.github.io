@@ -1,0 +1,225 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TCP的socket通信 - 莫春</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate">
+    <meta name="keywords" content="cuifengLI,"> 
+    <meta name="description" content="基于TCP协议的socket通信：讲基于TCP协议的socket通信之前的准备​        针对不同的网络通信层次，java给我们提供的网络功能有四大类：其中我们首先介绍的是InterAddre,"> 
+    <meta name="author" content="cuifeng Li"> 
+    <link rel="alternative" href="atom.xml" title="莫春" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+    <link rel="stylesheet" href="/css/diaspora.css">
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-8691406134231910",
+              enable_page_level_ads: true
+         });
+    </script>
+    <script async custom-element="amp-auto-ads" src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+    </script>
+</head>
+</html>
+<body class="loading">
+    <span id="config-title" style="display:none">莫春</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="icon-home image-icon" href="javascript:;" data-url="http://yoursite.com"></a>
+    <div title="播放/暂停" class="icon-play"></div>
+    <h3 class="subtitle">TCP的socket通信</h3>
+    <div class="social">
+        <!--<div class="like-icon">-->
+            <!--<a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+        <!--</div>-->
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">TCP的socket通信</h1>
+        <div class="stuff">
+            <span>九月 23, 2019</span>
+            
+  <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/socket-通信/">socket,通信</a></li></ul>
+
+
+        </div>
+        <div class="content markdown">
+            <h4 id="基于TCP协议的socket通信："><a href="#基于TCP协议的socket通信：" class="headerlink" title="基于TCP协议的socket通信："></a>基于TCP协议的socket通信：</h4><h5 id="讲基于TCP协议的socket通信之前的准备"><a href="#讲基于TCP协议的socket通信之前的准备" class="headerlink" title="讲基于TCP协议的socket通信之前的准备"></a>讲基于TCP协议的socket通信之前的准备</h5><p>​        针对不同的网络通信层次，java给我们提供的网络功能有四大类：其中我们首先介绍的是<strong><u>InterAddress</u></strong>——用于标识网络上的硬件资源</p>
+<p>示例代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InetAddressTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        <span class="comment">//获取本机InetAddress的实例：</span></span><br><span class="line">        InetAddress address = InetAddress.getLocalHost();</span><br><span class="line">        System.out.println(<span class="string">"本机名："</span> + address.getHostName());</span><br><span class="line">        System.out.println(<span class="string">"IP地址："</span> + address.getHostAddress());</span><br><span class="line">        <span class="keyword">byte</span>[] bytes = address.getAddress();</span><br><span class="line">        System.out.println(<span class="string">"字节数组形式的IP地址："</span> + Arrays.class);</span><br><span class="line">        System.out.println(<span class="string">"直接输出InetAddress对象："</span> + address);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​        通过上述代码框架，我们就可以获得本机的本机名、本机IP地址等</p>
+<h5 id="什么是socket？"><a href="#什么是socket？" class="headerlink" title="什么是socket？"></a>什么是socket？</h5><p>​        应用程序通过socket向网络发送请求或者应答网络请求。socket是支持TCP/IP协议的网络通信的网络通信的基本单元，是对网络通信过程中断点的抽象表示，包含了进行网络通信所必须的五种信息：连接所使用的协议；本地主机的IP地址；本地远程的协议端口；远地主机的IP地址以及远地进程的协议端口。</p>
+<h5 id="两台终端如何通过网络进行通信-IP"><a href="#两台终端如何通过网络进行通信-IP" class="headerlink" title="两台终端如何通过网络进行通信(IP)"></a>两台终端如何通过网络进行通信(IP)</h5><p><img src="E:%5CGit%5Cboke.deploy_git%5Cimg%5Csocket_1.jpg" alt="终端通信"></p>
+<h5 id="socket通信模型"><a href="#socket通信模型" class="headerlink" title="socket通信模型"></a>socket通信模型</h5><p><img src="E:%5CGit%5Cboke.deploy_git%5Cimg%5C37360672.jpg" alt="通信模型">                                                            图片来源于网络</p>
+<h5 id="socket通信实现步骤解析："><a href="#socket通信实现步骤解析：" class="headerlink" title="socket通信实现步骤解析："></a>socket通信实现步骤解析：</h5><ol>
+<li>创建ServerSocket和Socket</li>
+<li>打开连接到socket的输入/输出流</li>
+<li>按照协议对Socket进行读/写操作</li>
+<li>关闭输入输出流，以及socket</li>
+</ol>
+<h5 id="socket服务端的编写："><a href="#socket服务端的编写：" class="headerlink" title="socket服务端的编写："></a>socket服务端的编写：</h5><ol>
+<li>创建ServerSocket对象，绑定监听的端口</li>
+<li>调用accept()方法监听客户端的请求</li>
+<li>连接建立后，通过输入流读取客户端发送的请求信息</li>
+<li>通过输出流向客户端发送响应信息</li>
+<li>关闭相关资源</li>
+</ol>
+<p>代码实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SocketServer</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="comment">//1.创建一个服务器端Socket，即ServerSocket，指定绑定的端口，并监听此端口</span></span><br><span class="line">        ServerSocket serverSocket = <span class="keyword">new</span> ServerSocket(<span class="number">12345</span>);</span><br><span class="line">        InetAddress address = InetAddress.getLocalHost();</span><br><span class="line">        String ip = address.getHostAddress();</span><br><span class="line">        Socket socket = <span class="keyword">null</span>;</span><br><span class="line">        <span class="comment">//2.调用accept()等待客户端连接</span></span><br><span class="line">        System.out.println(<span class="string">"~~~服务端已就绪，等待客户端接入~，服务端ip地址: "</span> + ip);</span><br><span class="line">        socket = serverSocket.accept();</span><br><span class="line">        <span class="comment">//3.连接后获取输入流，读取客户端信息</span></span><br><span class="line">        InputStream is=<span class="keyword">null</span>;</span><br><span class="line">        InputStreamReader isr=<span class="keyword">null</span>;</span><br><span class="line">        BufferedReader br=<span class="keyword">null</span>;</span><br><span class="line">        OutputStream os=<span class="keyword">null</span>;</span><br><span class="line">        PrintWriter pw=<span class="keyword">null</span>;</span><br><span class="line">        is = socket.getInputStream();     <span class="comment">//获取输入流</span></span><br><span class="line">        isr = <span class="keyword">new</span> InputStreamReader(is,<span class="string">"UTF-8"</span>);</span><br><span class="line">        br = <span class="keyword">new</span> BufferedReader(isr);</span><br><span class="line">        String info = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">while</span>((info=br.readLine())!=<span class="keyword">null</span>)&#123;<span class="comment">//循环读取客户端的信息</span></span><br><span class="line">            System.out.println(<span class="string">"客户端发送过来的信息"</span> + info);</span><br><span class="line">        &#125;</span><br><span class="line">        socket.shutdownInput();<span class="comment">//关闭输入流</span></span><br><span class="line">        socket.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="true">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/5146554.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/qq/001faIUs4M2zna.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id='gitalk-container' class="comment link"
+        data-ae='false'
+        data-ci='f178c254e9aba3c644ea'
+        data-cs='bc6b63e12e13aebc62a709a44c94bd10c2735e59'
+        data-r='gitalk-comment'
+        data-o='cuifengLI'
+        data-a='cuifengLI'
+        data-d='true'
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+        <div id="lv-container">
+            <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC80NjMyMi8yMjgzMw==">
+    <script type="text/javascript">
+    window.livereOptions={
+        refer:'http://cuifengLI.github.io'
+    }
+       (function(d, s) {
+           var j, e = d.getElementsByTagName(s)[0];
+    
+           if (typeof LivereTower === 'function') { return; }
+    
+           j = d.createElement(s);
+           j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+           j.async = true;
+    
+           e.parentNode.insertBefore(j, e);
+       })(document, 'script');
+    </script>
+    <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+    </div>
+    <!-- City版安装代码已完成 -->
+        </div>
+    </div>
+</div>
+</body>
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-146502107-1', 'auto');
+  ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+
+
+</html>
