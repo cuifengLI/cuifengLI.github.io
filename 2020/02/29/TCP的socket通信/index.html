@@ -1,0 +1,207 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>socket通信 - 莫春</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate">
+    <meta name="keywords" content="cuifengLI,"> 
+    <meta name="description" content="一、什么是socket？​        所谓socket通常也称作”套接字”，用于描述IP地址和端口，是一个通信链的句柄。应用程序通常通过socket向网络发出请求或者应答网络请求。
+​     ,"> 
+    <meta name="author" content="cuifeng Li"> 
+    <link rel="alternative" href="atom.xml" title="莫春" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+    <link rel="stylesheet" href="/css/diaspora.css">
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-8691406134231910",
+              enable_page_level_ads: true
+         });
+    </script>
+    <script async custom-element="amp-auto-ads" src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+</head>
+</html>
+<body class="loading">
+    <span id="config-title" style="display:none">莫春</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="icon-home image-icon" href="javascript:;" data-url="http://yoursite.com"></a>
+    <div title="播放/暂停" class="icon-play"></div>
+    <h3 class="subtitle">socket通信</h3>
+    <div class="social">
+        <!--<div class="like-icon">-->
+            <!--<a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+        <!--</div>-->
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">socket通信</h1>
+        <div class="stuff">
+            <span>二月 29, 2020</span>
+            
+  <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/socket-通信/">socket,通信</a></li></ul>
+
+
+        </div>
+        <div class="content markdown">
+            <h5 id="一、什么是socket？"><a href="#一、什么是socket？" class="headerlink" title="一、什么是socket？"></a>一、什么是socket？</h5><p>​        所谓socket通常也称作”套接字”，用于描述IP地址和端口，是一个通信链的句柄。应用程序通常通过socket向网络发出请求或者应答网络请求。</p>
+<p>​        socket是支持TCP/IP协议的网络通信的网络通信的基本单元，是对网络通信过程中断点的抽象表示，包含了进行网络通信所必须的五种信息：连接所使用的协议；本地主机的IP地址；本地远程的协议端口；远地主机的IP地址以及远地进程的协议端口。</p>
+<p>​        计算机通讯：计算机A客户端给计算机B服务器端发送数据，需要知道计算机B的IP地址和端口号。我们要讨论的是网络中进程之间如何通信？</p>
+<ul>
+<li>首要解决的问题是如何唯一标识一个进程，在本地可以通过进程PID来唯一标识一个进程，但是在网络中这是行不通的。其实TCP/IP协议族已经帮我们解决了这个问题，网络层的“<strong>ip地址</strong>”可以唯一标识网络中的主机。</li>
+<li>传输层的“<strong>协议+端口</strong>”可以唯一标识主机中的应用程序（进程）。</li>
+<li>这样利用三元组（ip地址，协议，端口）就可以标识网络的进程了，网络中的进程通信就可以利用这个标志与其它进程进行交互。</li>
+</ul>
+<h5 id="二、网络通信基础——TCP和UDP对比分析"><a href="#二、网络通信基础——TCP和UDP对比分析" class="headerlink" title="二、网络通信基础——TCP和UDP对比分析"></a>二、网络通信基础——TCP和UDP对比分析</h5><ul>
+<li>UDP：基于无连接方式、效率高、不管是否存在接收方，保证数据范围在64k以内；遵从UDP协议</li>
+<li>TCP：基于连接的方式、安全性高、采用三次握手和四次分手的通信原理、双方必须建立连接才可以发送数据；遵从TCP协议  </li>
+</ul>
+<h5 id="三、基于TCP协议的socket通信："><a href="#三、基于TCP协议的socket通信：" class="headerlink" title="三、基于TCP协议的socket通信："></a>三、基于TCP协议的socket通信：</h5><h6 id="讲基于TCP协议的socket通信之前的准备"><a href="#讲基于TCP协议的socket通信之前的准备" class="headerlink" title="讲基于TCP协议的socket通信之前的准备"></a>讲基于TCP协议的socket通信之前的准备</h6><p>​        针对不同的网络通信层次，java给我们提供的网络功能有四大类：其中我们首先介绍的是<strong><u>InterAddress</u></strong>——用于标识网络上的硬件资源</p>
+<p>示例代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InetAddressTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        <span class="comment">//获取本机InetAddress的实例：</span></span><br><span class="line">        InetAddress address = InetAddress.getLocalHost();</span><br><span class="line">        System.out.println(<span class="string">"本机名："</span> + address.getHostName());</span><br><span class="line">        System.out.println(<span class="string">"IP地址："</span> + address.getHostAddress());</span><br><span class="line">        <span class="keyword">byte</span>[] bytes = address.getAddress();</span><br><span class="line">        System.out.println(<span class="string">"字节数组形式的IP地址："</span> + Arrays.class);</span><br><span class="line">        System.out.println(<span class="string">"直接输出InetAddress对象："</span> + address);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​        通过上述代码框架，我们就可以获得本机的本机名、本机IP地址等</p>
+<h5 id="四、开发一个Server-Client模型的程序"><a href="#四、开发一个Server-Client模型的程序" class="headerlink" title="四、开发一个Server-Client模型的程序"></a>四、开发一个Server-Client模型的程序</h5><p>​        服务器（Server）<!--谁接受请求谁就是服务器端-->：使用ServerSocket监听指定的端口，端口可以随意指定（由于1024以下的端口通常属于保留端口，在一些操作系统中不可以随意使用，所以建议使用大于1024的端口），等待客户连接请求，客户连接后，会话产生；在完成会话后，关闭连接。</p>
+<p>​        客户端（ServerClient）<!--谁发起请求谁就是客户端-->：使用Socket对网络上某一个服务器的某一个端口发出连接请求，一旦连接成功，打开会话；会话完成后，关闭Socket。客户端不需要指定打开的端口，通常临时的、动态的分配一个1024以上的端口。</p>
+<p>服务器端代码实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.tcp;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.OutputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.PrintWriter;</span><br><span class="line"><span class="keyword">import</span> java.net.ServerSocket;</span><br><span class="line"><span class="keyword">import</span> java.net.Socket;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Server</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException</span>&#123;</span><br><span class="line">		ServerSocket serverSocket=<span class="keyword">new</span> ServerSocket(<span class="number">8080</span>);</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">			System.out.println(<span class="string">"TCP服务端启动啦"</span>);</span><br><span class="line">			<span class="comment">//出现阻塞在这里</span></span><br><span class="line">			Socket accept=serverSocket.accept();</span><br><span class="line">			InputStream inputStream =accept.getInputStream();</span><br><span class="line">			<span class="keyword">byte</span>[] bytes=<span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];<span class="comment">//定义一个1024字节的数组</span></span><br><span class="line">			<span class="keyword">int</span> length=inputStream.read(bytes);</span><br><span class="line">			String result=<span class="keyword">new</span> String(bytes,<span class="number">0</span>,length);</span><br><span class="line">			System.out.println(<span class="string">"服务端接收到客户端发送的消息："</span>+result);</span><br><span class="line">			OutputStream outputStream=accept.getOutputStream();</span><br><span class="line">			PrintWriter printwriter=<span class="keyword">new</span> PrintWriter(outputStream);</span><br><span class="line">			printwriter.print(<span class="string">"我是服务器，我收到你的消息，这是服务器自动反馈。"</span>);</span><br><span class="line">			printwriter.flush();</span><br><span class="line">			accept.shutdownOutput();</span><br><span class="line">		&#125;<span class="keyword">catch</span>(Exception e) &#123;</span><br><span class="line">		&#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">			serverSocket.close();</span><br><span class="line">		&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>客户端代码的实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.tcp;</span><br><span class="line"><span class="keyword">import</span> java.io.BufferedReader;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStreamReader;</span><br><span class="line"><span class="keyword">import</span> java.io.OutputStream;</span><br><span class="line"><span class="keyword">import</span> java.net.Socket;</span><br><span class="line"><span class="keyword">import</span> java.net.UnknownHostException;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TCPClient</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> UnknownHostException, IOException </span>&#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">		Socket socket=<span class="keyword">new</span> Socket(<span class="string">"127.0.0.1"</span>,<span class="number">8080</span>);</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			OutputStream outputstream=socket.getOutputStream();</span><br><span class="line">			String msg=<span class="string">"欢迎大家进入江苏科技大学计算机学院"</span>;</span><br><span class="line">			outputstream.write(msg.getBytes());</span><br><span class="line">			System.out.println(<span class="string">"客户端发送消息完毕"</span>);</span><br><span class="line">			InputStream inputStream=socket.getInputStream();</span><br><span class="line">			BufferedReader br=<span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(inputStream));</span><br><span class="line">			String result=br.readLine();</span><br><span class="line">			System.out.println(<span class="string">"客户端==》服务器返回的结果"</span>+result);</span><br><span class="line">		&#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">			socket.close();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>项目运行结果：</p>
+<p>客户端(TCPClient)：</p>
+<p><img src="assets/%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%B0%83%E8%AF%95%E7%BB%93%E6%9E%9C.png" alt="客户端调试结果"></p>
+<p>服务器端(Server)：</p>
+<p><img src="assets/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%B0%83%E8%AF%95%E7%BB%93%E6%9E%9C.png" alt="服务端调试结果"></p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="true">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/5146554.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/qq/001faIUs4M2zna.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id='gitalk-container' class="comment link"
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d='false'
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-146502107-1', 'auto');
+  ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+
+
+</html>
